@@ -1,41 +1,33 @@
 import { useState } from "react";
 
 const SimpleInput = (props) => {
-  //const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  const nameInputChangeHandler = (e) => {
-    setEnteredName(e.target.value);
-    if (e.target.value.trim() !== "") {
-      setEnteredNameIsValid(true);
-    }
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  const nameInputChangeHandler = (event) => {
+    setEnteredName(event.target.value);
   };
 
   const nameInputBlurHandler = () => {
     setEnteredNameTouched(true);
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-    }
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = (event) => {
+    event.preventDefault();
+
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-
-    setEnteredNameIsValid(true);
-
     console.log(enteredName);
-    //const enteredValue = nameInputRef.current.value;
-  };
 
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+    setEnteredName("");
+    setEnteredNameTouched(false);
+  };
 
   const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
@@ -46,7 +38,6 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          //ref={nameInputRef}
           value={enteredName}
           type="text"
           id="name"
